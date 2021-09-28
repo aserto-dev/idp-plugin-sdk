@@ -1,0 +1,73 @@
+package plugin
+
+import (
+	"log"
+
+	"github.com/aserto-dev/aserto-idp/pkg/proto"
+	"github.com/aserto-dev/idp-plugin-sdk/config"
+	multierror "github.com/hashicorp/go-multierror"
+	status "google.golang.org/genproto/googleapis/rpc/status"
+)
+
+func (s AsertoPluginServer) Export(req *proto.ExportRequest, srv proto.Plugin_ExportServer) error {
+	errc := make(chan error, 128)
+	errDone := make(chan bool, 1)
+
+	go func() {
+		for {
+			e, more := <-errc
+			if !more {
+				// channel closed
+				errDone <- true
+				return
+			}
+			err := srv.Send(
+				&proto.ExportResponse{
+					Data: &proto.ExportResponse_Error{
+						Error: &status.Status{
+							Message: e.Error(),
+						},
+					},
+				},
+			)
+			if err != nil {
+				log.Println(err.Error())
+			}
+		}
+	}()
+
+	cfg := s.PluginHandler.GetConfig()
+	err := config.NewConfig(req.GetConfig(), cfg)
+	if err != nil {
+		return err
+	}
+
+	for {
+		users, err := s.PluginHandler.Read()
+		if err != nil {
+			if merr, ok := err.(*multierror.Error); ok {
+				for _, e := range merr.Errors {
+					errc <- e
+				}
+			}
+		}
+		for _, u := range users {
+			res := &proto.ExportResponse{
+				Data: &proto.ExportResponse_User{
+					User: &proto.User{
+						Data: &proto.User_User{
+							User: u,
+						},
+					},
+				},
+			}
+			if err = srv.Send(res); err != nil {
+				log.Println(err)
+				return err
+			}
+		}
+	}
+	close(errc)
+	<-errDone
+	return nil
+}
