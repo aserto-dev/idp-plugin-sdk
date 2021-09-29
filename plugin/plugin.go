@@ -5,16 +5,12 @@ import (
 
 	"github.com/aserto-dev/aserto-idp/pkg/proto"
 	api "github.com/aserto-dev/go-grpc/aserto/api/v1"
+	"github.com/aserto-dev/idp-plugin-sdk/config"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type PluginHandler interface {
-	// Info(ctx context.Context) ([]*api.ConfigElement, error)
-	// Import(ctx context.Context, errChannel <-chan error, usersChannel <-chan *api.User) error
-	// Export(ctx context.Context, errChannel <-chan error, usersChannel chan<- *api.User) error
-	// Export(ctx context.Context, done func()) (func() (*api.User, error), error)
-	// Validate(ctx context.Context, config map[string]interface{}) error
-	// Import(config interface{}, recv func() *api.User, errf func(error)) error
-	// Export(config interface{}, send func(*api.User), errf func(error)) error
 	GetConfig() PluginConfig
 	Open(config PluginConfig) error
 	Read() ([]*api.User, error)
@@ -34,5 +30,11 @@ type AsertoPluginServer struct {
 func (s AsertoPluginServer) Validate(ctx context.Context, req *proto.ValidateRequest) (*proto.ValidateResponse, error) {
 	response := &proto.ValidateResponse{}
 
-	return response, s.PluginHandler.GetConfig().Validate()
+	cfg := s.PluginHandler.GetConfig()
+	err := config.NewConfig(req.Config, cfg)
+	if err != nil {
+		return response, status.Error(codes.InvalidArgument, "failed to parse config")
+	}
+
+	return response, cfg.Validate()
 }

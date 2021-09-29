@@ -28,6 +28,10 @@ func NewConfig(pbStruct *structpb.Struct, v interface{}) error {
 func ParseApiConfig(cfg interface{}) ([]*api.ConfigElement, error) {
 	v := reflect.ValueOf(cfg)
 
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+
 	typeOfS := v.Type()
 
 	var configs []*api.ConfigElement

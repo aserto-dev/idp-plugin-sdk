@@ -23,15 +23,11 @@ var PluginMap = plugin.PluginSet{
 }
 
 func Serve(options *PluginOptions) error {
-	return nil
-
-	handler := &AsertoPluginServer{
-		PluginHandler: options.PluginHandler,
-	}
-
 	pSet := make(plugin.PluginSet)
 	pSet["idp-plugin"] = &grpcplugin.PluginGRPC{
-		Impl: handler,
+		Impl: &AsertoPluginServer{
+			PluginHandler: options.PluginHandler,
+		},
 	}
 	plugin.Serve(&plugin.ServeConfig{
 		HandshakeConfig: Handshake,

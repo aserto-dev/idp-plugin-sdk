@@ -1,6 +1,7 @@
 package plugin
 
 import (
+	"io"
 	"log"
 
 	"github.com/aserto-dev/aserto-idp/pkg/proto"
@@ -42,8 +43,16 @@ func (s AsertoPluginServer) Export(req *proto.ExportRequest, srv proto.Plugin_Ex
 		return err
 	}
 
+	err = s.PluginHandler.Open(cfg)
+	if err != nil {
+		return err
+	}
+
 	for {
 		users, err := s.PluginHandler.Read()
+		if err == io.EOF {
+			break
+		}
 		if err != nil {
 			if merr, ok := err.(*multierror.Error); ok {
 				for _, e := range merr.Errors {
