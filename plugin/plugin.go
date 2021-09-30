@@ -3,8 +3,8 @@ package plugin
 import (
 	"context"
 
-	"github.com/aserto-dev/aserto-idp/pkg/proto"
 	api "github.com/aserto-dev/go-grpc/aserto/api/v1"
+	proto "github.com/aserto-dev/go-grpc/aserto/idpplugin/v1"
 	"github.com/aserto-dev/idp-plugin-sdk/config"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

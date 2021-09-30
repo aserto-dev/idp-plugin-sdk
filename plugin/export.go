@@ -5,7 +5,7 @@ import (
 	"io"
 	"log"
 
-	"github.com/aserto-dev/aserto-idp/pkg/proto"
+	proto "github.com/aserto-dev/go-grpc/aserto/idpplugin/v1"
 	"github.com/aserto-dev/idp-plugin-sdk/config"
 	multierror "github.com/hashicorp/go-multierror"
 	status "google.golang.org/genproto/googleapis/rpc/status"
@@ -69,11 +69,7 @@ func (s AsertoPluginServer) Export(req *proto.ExportRequest, srv proto.Plugin_Ex
 		for _, u := range users {
 			res := &proto.ExportResponse{
 				Data: &proto.ExportResponse_User{
-					User: &proto.User{
-						Data: &proto.User_User{
-							User: u,
-						},
-					},
+					User: u,
 				},
 			}
 			if err = srv.Send(res); err != nil {

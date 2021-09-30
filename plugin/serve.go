@@ -13,8 +13,8 @@ type PluginOptions struct {
 var Handshake = plugin.HandshakeConfig{
 	// This isn't required when using VersionedPlugins
 	ProtocolVersion:  1,
-	MagicCookieKey:   "BASIC_PLUGIN",
-	MagicCookieValue: "hello",
+	MagicCookieKey:   "IDP_PLUGIN",
+	MagicCookieValue: "be60172b-2526-432a-865c-12386998a714",
 }
 
 // PluginMap is the map of plugins we can dispense.

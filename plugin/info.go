@@ -3,7 +3,7 @@ package plugin
 import (
 	"context"
 
-	"github.com/aserto-dev/aserto-idp/pkg/proto"
+	proto "github.com/aserto-dev/go-grpc/aserto/idpplugin/v1"
 	"github.com/aserto-dev/idp-plugin-sdk/config"
 	"github.com/aserto-dev/idp-plugin-sdk/version"
 )

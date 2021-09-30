@@ -5,7 +5,7 @@ import (
 	"io"
 	"log"
 
-	"github.com/aserto-dev/aserto-idp/pkg/proto"
+	proto "github.com/aserto-dev/go-grpc/aserto/idpplugin/v1"
 	"github.com/aserto-dev/idp-plugin-sdk/config"
 	status "google.golang.org/genproto/googleapis/rpc/status"
 )
@@ -66,11 +66,9 @@ func (s AsertoPluginServer) Import(srv proto.Plugin_ImportServer) error {
 		}
 
 		if user := req.GetUser(); user != nil {
-			if u := user.GetUser(); u != nil {
-				err := s.PluginHandler.Write(u)
-				if err != nil {
-					errc <- err
-				}
+			err := s.PluginHandler.Write(user)
+			if err != nil {
+				errc <- err
 			}
 		}
 	}

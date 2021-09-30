@@ -3,7 +3,7 @@ package grpcplugin
 import (
 	"context"
 
-	"github.com/aserto-dev/aserto-idp/pkg/proto"
+	proto "github.com/aserto-dev/go-grpc/aserto/idpplugin/v1"
 	plugin "github.com/hashicorp/go-plugin"
 	"google.golang.org/grpc"
 )
