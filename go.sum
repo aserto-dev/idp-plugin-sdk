@@ -53,6 +53,8 @@ github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da/go.mod h1:Q73ZrmV
 github.com/armon/go-radix v0.0.0-20180808171621-7fddfc383310/go.mod h1:ufUuZ+zHj4x4TnLV4JWEpy2hxWSpsRywHrMgIH9cCH8=
 github.com/aserto-dev/aserto-idp v0.0.0-20210921102020-af5f8f8e15cc h1:yZXEFoOuagvMkOO/2YPqX/OWi4bmmjl1ZF3/rPnXOqc=
 github.com/aserto-dev/aserto-idp v0.0.0-20210921102020-af5f8f8e15cc/go.mod h1:LQw6QmGXPd6BCP4guJRDYXL4Ua8Nnd3lh+tRkq5Lh5I=
+github.com/aserto-dev/aserto-idp v0.0.0-20210930094211-011ada040ea2 h1:q4GrtizQb5NDfgN5pabA7XOIs+G9TdYoOGfHF62avDk=
+github.com/aserto-dev/aserto-idp v0.0.0-20210930094211-011ada040ea2/go.mod h1:/3gbH6hHXj3mE2yYpGeBIh/3aVAPeF/LxlUL5M72UyM=
 github.com/aserto-dev/clui v0.0.1/go.mod h1:rk87XJefw6Pp8ef3nTirzMVTDE0g2BWojwAZy3cC/TY=
 github.com/aserto-dev/clui v0.1.1/go.mod h1:rk87XJefw6Pp8ef3nTirzMVTDE0g2BWojwAZy3cC/TY=
 github.com/aserto-dev/clui v0.1.2 h1:WWLyECVABQ/eRrMSW08lE12Bz8Bh/CDILxpTIoEhOYs=

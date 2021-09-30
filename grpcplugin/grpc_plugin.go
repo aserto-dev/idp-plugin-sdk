@@ -55,9 +55,9 @@ func (s *pluginGRPCServer) Export(req *proto.ExportRequest, srv proto.Plugin_Exp
 	return s.server.Export(req, srv)
 }
 
-// func (s *pluginGRPCServer) Delete(srv proto.Plugin_DeleteServer) error {
-// 	return s.Impl.Delete(srv)
-// }
+func (s *pluginGRPCServer) Delete(srv proto.Plugin_DeleteServer) error {
+	return s.server.Delete(srv)
+}
 
 func (s *pluginGRPCServer) Validate(ctx context.Context, req *proto.ValidateRequest) (*proto.ValidateResponse, error) {
 	return s.server.Validate(ctx, req)
@@ -79,9 +79,9 @@ func (c *pluginGRPCClient) Export(ctx context.Context, in *proto.ExportRequest, 
 	return c.client.Export(ctx, in, opts...)
 }
 
-// func (c *pluginGRPCClient) Delete(ctx context.Context, opts ...grpc.CallOption) (proto.Plugin_DeleteClient, error) {
-// 	return c.client.Delete(ctx, opts...)
-// }
+func (c *pluginGRPCClient) Delete(ctx context.Context, opts ...grpc.CallOption) (proto.Plugin_DeleteClient, error) {
+	return c.client.Delete(ctx, opts...)
+}
 
 func (c *pluginGRPCClient) Validate(ctx context.Context, in *proto.ValidateRequest, opts ...grpc.CallOption) (*proto.ValidateResponse, error) {
 	return c.client.Validate(ctx, in, opts...)
