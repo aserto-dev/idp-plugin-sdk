@@ -8,15 +8,10 @@ import (
 	"io"
 	"log"
 	"os"
-	"path/filepath"
-	"runtime"
 
-	"github.com/aserto-dev/aserto-idp/shared/pb"
 	api "github.com/aserto-dev/go-grpc/aserto/api/v1"
+	"github.com/aserto-dev/idp-plugin-sdk/pb"
 	"github.com/aserto-dev/idp-plugin-sdk/plugin"
-	"golang.org/x/sys/unix"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -34,40 +29,6 @@ type JsonPlugin struct {
 	decoder *json.Decoder
 	users   bytes.Buffer
 	count   int
-}
-
-type JsonPluginConfig struct {
-	File string `description:"Json file path" kind:"attribute" mode:"normal" readonly:"false"`
-}
-
-func (c *JsonPluginConfig) Validate() error {
-	dir := filepath.Dir(c.File)
-
-	info, err := os.Stat(dir)
-	if err != nil {
-		return status.Error(codes.NotFound, err.Error())
-	}
-
-	if !info.IsDir() {
-		return status.Errorf(codes.InvalidArgument, "%s is not a directory", dir)
-	}
-
-	if runtime.GOOS == "windows" {
-		if info.Mode().Perm()&(1<<(uint(7))) == 0 {
-			return status.Errorf(codes.PermissionDenied, "cannot access %s", dir)
-		}
-	} else {
-		err = unix.Access(dir, unix.W_OK)
-		if err != nil {
-			return status.Errorf(codes.PermissionDenied, "cannot access %s: %s", dir, err.Error())
-		}
-	}
-
-	return nil
-}
-
-func (c *JsonPluginConfig) Description() string {
-	return "JSON plugin"
 }
 
 func NewJsonPlugin() *JsonPlugin {

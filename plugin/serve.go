@@ -1,7 +1,7 @@
 package plugin
 
 import (
-	"github.com/aserto-dev/aserto-idp/shared/grpcplugin"
+	"github.com/aserto-dev/idp-plugin-sdk/grpcplugin"
 	plugin "github.com/hashicorp/go-plugin"
 )
 

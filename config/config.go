@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"strconv"
+	"strings"
 
 	"reflect"
 
@@ -48,7 +49,7 @@ func ParseApiConfig(cfg interface{}) ([]*api.ConfigElement, error) {
 			Id:          int32(i + 1),
 			Kind:        getElementKind(tag.Get("kind")),
 			Type:        getElementType(field.Type.String()),
-			Name:        field.Name,
+			Name:        strings.ToLower(field.Name),
 			Description: tag.Get("description"),
 			Mode:        getDisplayMode(tag.Get("mode")),
 			ReadOnly:    readOnly,

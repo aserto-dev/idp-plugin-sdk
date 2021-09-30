@@ -1,6 +1,7 @@
 package plugin
 
 import (
+	"fmt"
 	"io"
 	"log"
 
@@ -13,6 +14,11 @@ import (
 func (s AsertoPluginServer) Export(req *proto.ExportRequest, srv proto.Plugin_ExportServer) error {
 	errc := make(chan error, 128)
 	errDone := make(chan bool, 1)
+	defer func() {
+		if r := recover(); r != nil {
+			errc <- fmt.Errorf("recovering from panic in Import error is: %v", r)
+		}
+	}()
 
 	go func() {
 		for {
