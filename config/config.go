@@ -1,13 +1,13 @@
 package config
 
 import (
-	"encoding/json"
 	"strconv"
 	"strings"
 
 	"reflect"
 
 	api "github.com/aserto-dev/go-grpc/aserto/api/v1"
+	jsoniter "github.com/json-iterator/go"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/structpb"
 )
@@ -17,7 +17,7 @@ func NewConfig(pbStruct *structpb.Struct, v interface{}) error {
 	if err != nil {
 		return err
 	}
-
+	json := jsoniter.Config{TagKey: "name"}.Froze()
 	err = json.Unmarshal(configBytes, v)
 	if err != nil {
 		return err
@@ -45,11 +45,16 @@ func ParseApiConfig(cfg interface{}) ([]*api.ConfigElement, error) {
 			return nil, err
 		}
 
+		var fieldName string
+		fieldName, ok := tag.Lookup("name")
+		if !ok {
+			fieldName = strings.ToLower(field.Name)
+		}
 		c := &api.ConfigElement{
 			Id:          int32(i + 1),
 			Kind:        getElementKind(tag.Get("kind")),
 			Type:        getElementType(field.Type.String()),
-			Name:        strings.ToLower(field.Name),
+			Name:        fieldName,
 			Description: tag.Get("description"),
 			Mode:        getDisplayMode(tag.Get("mode")),
 			ReadOnly:    readOnly,
