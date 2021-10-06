@@ -1,6 +1,9 @@
 package srv
 
 import (
+	"io"
+	"log"
+
 	api "github.com/aserto-dev/go-grpc/aserto/api/v1"
 	"github.com/aserto-dev/idp-plugin-sdk/plugin"
 )
@@ -10,11 +13,13 @@ type DummyPlugin struct {
 }
 
 type DummyPluginConfig struct {
-	IntValue    int    `description:"int value" kind:"attribute" mode:"normal" readonly:"false"`
-	StringValue string `description:"string value" kind:"secret" mode:"masked" readonly:"false"`
+	IntValue    int    `description:"int value" kind:"attribute" mode:"normal" readonly:"false" name:"int_value"`
+	StringValue string `description:"string value" kind:"secret" mode:"masked" readonly:"false" name:"string_value"`
 }
 
 func (c *DummyPluginConfig) Validate() error {
+	log.Printf("Validating %d", c.IntValue)
+	log.Printf("Validating %s", c.StringValue)
 	return nil
 }
 
@@ -31,14 +36,17 @@ func (s DummyPlugin) GetConfig() plugin.PluginConfig {
 }
 
 func (s DummyPlugin) Open(config plugin.PluginConfig) error {
+	log.Println("Open()")
 	return nil
 }
 
 func (s DummyPlugin) Read() ([]*api.User, error) {
-	return nil, nil
+	log.Println("Received read()")
+	return nil, io.EOF
 }
 
-func (s DummyPlugin) Write(*api.User) error {
+func (s DummyPlugin) Write(user *api.User) error {
+	log.Printf("Writing user: %v", user)
 	return nil
 }
 
