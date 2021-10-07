@@ -58,7 +58,7 @@ func (s AsertoPluginServer) Delete(srv proto.Plugin_DeleteServer) error {
 			if err != nil {
 				errc <- err
 			}
-			err := s.PluginHandler.Open(cfg)
+			err := s.PluginHandler.Open(cfg, OperationTypeDelete)
 			if err != nil {
 				return err
 			}

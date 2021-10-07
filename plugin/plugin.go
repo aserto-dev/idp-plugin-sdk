@@ -10,9 +10,17 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+type OperationType int
+
+const (
+	OperationTypeRead OperationType = iota
+	OperationTypeWrite
+	OperationTypeDelete
+)
+
 type PluginHandler interface {
 	GetConfig() PluginConfig
-	Open(config PluginConfig) error
+	Open(PluginConfig, OperationType) error
 	Read() ([]*api.User, error)
 	Write(*api.User) error
 	Delete(string) error
