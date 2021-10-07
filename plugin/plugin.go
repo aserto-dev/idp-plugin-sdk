@@ -15,6 +15,7 @@ type PluginHandler interface {
 	Open(config PluginConfig) error
 	Read() ([]*api.User, error)
 	Write(*api.User) error
+	Delete(string) error
 	Close() error
 }
 

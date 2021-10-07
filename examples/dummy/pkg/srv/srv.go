@@ -50,6 +50,11 @@ func (s DummyPlugin) Write(user *api.User) error {
 	return nil
 }
 
+func (s DummyPlugin) Delete(userId string) error {
+	log.Printf("Deleting user: %s", userId)
+	return nil
+}
+
 func (s DummyPlugin) Close() error {
 	return nil
 }
