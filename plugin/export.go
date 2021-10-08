@@ -49,7 +49,7 @@ func (s AsertoPluginServer) Export(req *proto.ExportRequest, srv proto.Plugin_Ex
 		return err
 	}
 
-	err = s.PluginHandler.Open(cfg)
+	err = s.PluginHandler.Open(cfg, OperationTypeRead)
 	if err != nil {
 		return err
 	}

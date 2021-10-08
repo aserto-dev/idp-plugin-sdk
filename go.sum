@@ -39,8 +39,8 @@ github.com/allegro/bigcache/v3 v3.0.0/go.mod h1:t5TAJn1B9qvf/VlJrSM1r6NlFAYoFDub
 github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
 github.com/aserto-dev/clui v0.1.2 h1:WWLyECVABQ/eRrMSW08lE12Bz8Bh/CDILxpTIoEhOYs=
 github.com/aserto-dev/clui v0.1.2/go.mod h1:rk87XJefw6Pp8ef3nTirzMVTDE0g2BWojwAZy3cC/TY=
-github.com/aserto-dev/go-grpc v0.0.6 h1:CIhbsjoM7MmZo3Bls9iQbCu5z5A1k06ZjFJOWr7P2TM=
-github.com/aserto-dev/go-grpc v0.0.6/go.mod h1:5YmqvgT9WReiXuxWDe36TBBiwlALLHRky5bT2Yf9RcQ=
+github.com/aserto-dev/go-grpc v0.0.8-0.20211007104643-202ec2b6a966 h1:YpVTJOO1aZpwDZyUCXF8I8bhU3iAJswEk65hjYEL39U=
+github.com/aserto-dev/go-grpc v0.0.8-0.20211007104643-202ec2b6a966/go.mod h1:5YmqvgT9WReiXuxWDe36TBBiwlALLHRky5bT2Yf9RcQ=
 github.com/aserto-dev/mage-loot v0.4.8 h1:6S1eYkWtL0rD4I5tt/5keulOC+yPLpADgga/nwPqbLw=
 github.com/aserto-dev/mage-loot v0.4.8/go.mod h1:ZMqDY+kCbp1b7fc5RcsPlbuONaKZrY3w16Fs1bmb0cU=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=

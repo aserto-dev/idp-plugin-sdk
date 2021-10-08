@@ -58,7 +58,7 @@ func (s AsertoPluginServer) Import(srv proto.Plugin_ImportServer) error {
 			if err != nil {
 				errc <- err
 			}
-			err := s.PluginHandler.Open(cfg)
+			err := s.PluginHandler.Open(cfg, OperationTypeWrite)
 			if err != nil {
 				return err
 			}

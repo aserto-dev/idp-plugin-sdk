@@ -9,7 +9,8 @@ import (
 )
 
 type DummyPlugin struct {
-	Config DummyPluginConfig
+	Config    DummyPluginConfig
+	Operation plugin.OperationType
 }
 
 type DummyPluginConfig struct {
@@ -35,7 +36,7 @@ func (s DummyPlugin) GetConfig() plugin.PluginConfig {
 	return &DummyPluginConfig{}
 }
 
-func (s DummyPlugin) Open(config plugin.PluginConfig) error {
+func (s DummyPlugin) Open(config plugin.PluginConfig, operation plugin.OperationType) error {
 	log.Println("Open()")
 	return nil
 }
@@ -47,6 +48,11 @@ func (s DummyPlugin) Read() ([]*api.User, error) {
 
 func (s DummyPlugin) Write(user *api.User) error {
 	log.Printf("Writing user: %v", user)
+	return nil
+}
+
+func (s DummyPlugin) Delete(userId string) error {
+	log.Printf("Deleting user: %s", userId)
 	return nil
 }
 
