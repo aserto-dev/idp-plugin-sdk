@@ -73,7 +73,7 @@ func (s AsertoPluginServer) Delete(srv proto.Plugin_DeleteServer) error {
 		}
 	}
 
-	err := s.PluginHandler.Close()
+	_, err := s.PluginHandler.Close()
 	if err != nil {
 		errc <- err
 	}

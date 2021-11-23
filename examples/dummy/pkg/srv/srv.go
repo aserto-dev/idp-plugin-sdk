@@ -56,6 +56,6 @@ func (s DummyPlugin) Delete(userId string) error {
 	return nil
 }
 
-func (s DummyPlugin) Close() error {
-	return nil
+func (s DummyPlugin) Close() (*plugin.Stats, error) {
+	return nil, nil
 }
