@@ -3,8 +3,8 @@ module github.com/aserto-dev/idp-plugin-sdk
 go 1.16
 
 require (
-	github.com/aserto-dev/go-grpc v0.0.8-0.20211007104643-202ec2b6a966
-	github.com/aserto-dev/mage-loot v0.4.8
+	github.com/aserto-dev/go-grpc v0.0.26
+	github.com/aserto-dev/mage-loot v0.4.16
 	github.com/hashicorp/go-hclog v0.16.2 // indirect
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/hashicorp/go-plugin v1.4.3

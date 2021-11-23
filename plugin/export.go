@@ -78,6 +78,12 @@ func (s AsertoPluginServer) Export(req *proto.ExportRequest, srv proto.Plugin_Ex
 			}
 		}
 	}
+
+	_, err = s.PluginHandler.Close()
+	if err != nil {
+		errc <- err
+	}
+
 	close(errc)
 	<-errDone
 	return nil
