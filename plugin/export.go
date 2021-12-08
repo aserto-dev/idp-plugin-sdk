@@ -13,19 +13,31 @@ import (
 
 func (s AsertoPluginServer) Export(req *proto.ExportRequest, srv proto.Plugin_ExportServer) error {
 	errc := make(chan error, 128)
-	errDone := make(chan bool, 1)
+	errDone := make(chan struct{}, 1)
+	pluginClosed := false
+
 	defer func() {
+		close(errc)
+		<-errDone
+
+		if !pluginClosed {
+			_, err := s.PluginHandler.Close()
+			if err != nil {
+				log.Println(err.Error())
+			}
+		}
+
 		if r := recover(); r != nil {
-			errc <- fmt.Errorf("recovering from panic in Import error is: %v", r)
+			log.Println(fmt.Errorf("recovering from panic in Export error is: %v", r))
 		}
 	}()
 
 	go func() {
+		defer close(errDone)
 		for {
 			e, more := <-errc
 			if !more {
 				// channel closed
-				errDone <- true
 				return
 			}
 			err := srv.Send(
@@ -39,6 +51,7 @@ func (s AsertoPluginServer) Export(req *proto.ExportRequest, srv proto.Plugin_Ex
 			)
 			if err != nil {
 				log.Println(err.Error())
+				return
 			}
 		}
 	}()
@@ -64,7 +77,10 @@ func (s AsertoPluginServer) Export(req *proto.ExportRequest, srv proto.Plugin_Ex
 				for _, e := range merr.Errors {
 					errc <- e
 				}
+			} else {
+				errc <- err
 			}
+			break
 		}
 		for _, u := range users {
 			res := &proto.ExportResponse{
@@ -84,7 +100,6 @@ func (s AsertoPluginServer) Export(req *proto.ExportRequest, srv proto.Plugin_Ex
 		errc <- err
 	}
 
-	close(errc)
-	<-errDone
+	pluginClosed = true
 	return nil
 }

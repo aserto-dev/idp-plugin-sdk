@@ -12,11 +12,22 @@ import (
 
 func (s AsertoPluginServer) Delete(srv proto.Plugin_DeleteServer) error {
 	errc := make(chan error, 128)
-	errDone := make(chan bool, 1)
+	errDone := make(chan struct{}, 1)
+	pluginClosed := false
 
 	defer func() {
+		close(errc)
+		<-errDone
+
+		if !pluginClosed {
+			_, err := s.PluginHandler.Close()
+			if err != nil {
+				log.Println(err.Error())
+			}
+		}
+
 		if r := recover(); r != nil {
-			errc <- fmt.Errorf("recovering from panic in Delete. error is: %v", r)
+			log.Println(fmt.Errorf("recovering from panic in Delete error is: %v", r))
 		}
 	}()
 
@@ -24,11 +35,10 @@ func (s AsertoPluginServer) Delete(srv proto.Plugin_DeleteServer) error {
 	cfg := s.PluginHandler.GetConfig()
 
 	go func() {
+		defer close(errDone)
 		for {
 			e, more := <-errc
 			if !more {
-				// channel closed
-				errDone <- true
 				return
 			}
 			err := srv.Send(
@@ -40,6 +50,7 @@ func (s AsertoPluginServer) Delete(srv proto.Plugin_DeleteServer) error {
 			)
 			if err != nil {
 				log.Println(err.Error())
+				return
 			}
 		}
 	}()
@@ -51,12 +62,13 @@ func (s AsertoPluginServer) Delete(srv proto.Plugin_DeleteServer) error {
 		}
 		if err != nil {
 			errc <- err
+			break
 		}
 
 		if !initialized {
 			err = config.NewConfig(req.GetConfig(), cfg)
 			if err != nil {
-				errc <- err
+				return err
 			}
 			err := s.PluginHandler.Open(cfg, OperationTypeDelete)
 			if err != nil {
@@ -78,7 +90,6 @@ func (s AsertoPluginServer) Delete(srv proto.Plugin_DeleteServer) error {
 		errc <- err
 	}
 
-	close(errc)
-	<-errDone
+	pluginClosed = true
 	return nil
 }
