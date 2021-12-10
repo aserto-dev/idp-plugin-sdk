@@ -17,7 +17,7 @@ func (s AsertoPluginServer) Info(ctx context.Context, req *proto.InfoRequest) (*
 	}
 
 	response := proto.InfoResponse{
-		Build:       version.GetBuildInfo(config.GetVersion),
+		Build:       version.GetBuildInfo(s.PluginHandler.GetVersion),
 		Description: cfg.Description(),
 		Configs:     conf,
 	}

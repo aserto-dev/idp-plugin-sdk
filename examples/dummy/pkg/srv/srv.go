@@ -3,6 +3,7 @@ package srv
 import (
 	"io"
 	"log"
+	"time"
 
 	api "github.com/aserto-dev/go-grpc/aserto/api/v1"
 	"github.com/aserto-dev/idp-plugin-sdk/plugin"
@@ -34,6 +35,10 @@ func NewDummyPlugin() *DummyPlugin {
 
 func (s DummyPlugin) GetConfig() plugin.PluginConfig {
 	return &DummyPluginConfig{}
+}
+
+func (s DummyPlugin) GetVersion() (string, string, string) {
+	return "0.0.1", time.Now().UTC().Format(time.RFC3339), ""
 }
 
 func (s DummyPlugin) Open(config plugin.PluginConfig, operation plugin.OperationType) error {
