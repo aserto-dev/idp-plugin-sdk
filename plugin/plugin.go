@@ -25,6 +25,7 @@ type PluginHandler interface {
 	Write(*api.User) error
 	Delete(string) error
 	Close() (*Stats, error)
+	GetVersion() (string, string, string)
 }
 
 type PluginConfig interface {
