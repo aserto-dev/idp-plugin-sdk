@@ -13,8 +13,8 @@ import (
 type OperationType int
 
 const (
-	OperationTypeRead OperationType = iota
-	OperationTypeWrite
+	OperationTypeWrite OperationType = iota
+	OperationTypeRead
 	OperationTypeDelete
 )
 
@@ -29,7 +29,7 @@ type PluginHandler interface {
 }
 
 type PluginConfig interface {
-	Validate() error
+	Validate(OperationType) error
 	Description() string
 }
 
@@ -45,6 +45,11 @@ func (s AsertoPluginServer) Validate(ctx context.Context, req *proto.ValidateReq
 	if err != nil {
 		return response, status.Error(codes.InvalidArgument, "failed to parse config")
 	}
+	opType := req.OpType
+	if opType == proto.OperationType_OPERATION_TYPE_UNKNOWN {
+		return response, status.Error(codes.InvalidArgument, "unknown operation type provided")
+	}
+	opTypePlugin := (OperationType)(opType - 1)
 
-	return response, cfg.Validate()
+	return response, cfg.Validate(opTypePlugin)
 }

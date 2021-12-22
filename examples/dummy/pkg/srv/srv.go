@@ -19,7 +19,7 @@ type DummyPluginConfig struct {
 	StringValue string `description:"string value" kind:"secret" mode:"masked" readonly:"false" name:"string_value"`
 }
 
-func (c *DummyPluginConfig) Validate() error {
+func (c *DummyPluginConfig) Validate(opType plugin.OperationType) error {
 	log.Printf("Validating %d", c.IntValue)
 	log.Printf("Validating %s", c.StringValue)
 	return nil
