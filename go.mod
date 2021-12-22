@@ -3,15 +3,15 @@ module github.com/aserto-dev/idp-plugin-sdk
 go 1.17
 
 require (
-	github.com/aserto-dev/go-grpc v0.0.26
+	github.com/aserto-dev/go-grpc v0.0.33
 	github.com/aserto-dev/mage-loot v0.4.16
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/hashicorp/go-plugin v1.4.3
 	github.com/json-iterator/go v1.1.12
-	github.com/magefile/mage v1.11.0
+	github.com/magefile/mage v1.12.0
 	github.com/stretchr/testify v1.7.0
-	google.golang.org/genproto v0.0.0-20210903162649-d08c68adba83
-	google.golang.org/grpc v1.40.0
+	google.golang.org/genproto v0.0.0-20211208223120-3a66f561d7aa
+	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.27.1
 )
 
@@ -20,7 +20,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.12.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.5.0 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.7.1 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-hclog v0.16.2 // indirect
 	github.com/hashicorp/yamux v0.0.0-20180604194846-3520598351bb // indirect
