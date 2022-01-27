@@ -40,9 +40,16 @@ func ParseApiConfig(cfg interface{}) ([]*api.ConfigElement, error) {
 	for i := 0; i < v.NumField(); i++ {
 		field := typeOfS.Field(i)
 		tag := field.Tag
-		readOnly, err := strconv.ParseBool(tag.Get("readonly"))
-		if err != nil {
-			return nil, err
+		readonly := tag.Get("readonly")
+		var readOnly bool
+		var err error
+		if readonly == "" {
+			readOnly = false
+		} else {
+			readOnly, err = strconv.ParseBool(tag.Get("readonly"))
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		var fieldName string

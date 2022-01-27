@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/aserto-dev/go-grpc v0.8.0
 	github.com/aserto-dev/mage-loot v0.8.0
+	github.com/golang/mock v1.6.0
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/hashicorp/go-plugin v1.4.3
 	github.com/json-iterator/go v1.1.12
