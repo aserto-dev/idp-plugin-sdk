@@ -3,8 +3,8 @@ module github.com/aserto-dev/idp-plugin-sdk
 go 1.17
 
 require (
-	github.com/aserto-dev/go-grpc v0.7.0
-	github.com/aserto-dev/mage-loot v0.7.0
+	github.com/aserto-dev/go-grpc v0.8.0
+	github.com/aserto-dev/mage-loot v0.8.0
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/hashicorp/go-plugin v1.4.3
 	github.com/json-iterator/go v1.1.12
@@ -16,7 +16,7 @@ require (
 )
 
 require (
-	github.com/aserto-dev/clui v0.7.0 // indirect
+	github.com/aserto-dev/clui v0.8.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
