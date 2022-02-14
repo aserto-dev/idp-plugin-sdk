@@ -10,6 +10,9 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+//go:generate mockgen -source=plugin.go -destination=mock_plugin.go -package=plugin --build_flags=--mod=mod
+//go:generate mockgen -destination=mock_servers.go -package=plugin github.com/aserto-dev/go-grpc/aserto/idpplugin/v1 Plugin_DeleteServer,Plugin_ExportServer,Plugin_ImportServer
+
 type OperationType int
 
 const (
