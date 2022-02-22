@@ -15,12 +15,12 @@ func TestInfoFail(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
-	pluginConfig := mocks.NewMockPluginConfig(ctrl)
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
+	pluginConfig := mocks.NewMockConfig(ctrl)
 	req := &proto.InfoRequest{}
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetVersion().Return("", "date", "")
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(pluginConfig)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetVersion().Return("", "date", "")
 	pluginConfig.EXPECT().Description().Return("This is a description")
 
 	// Act

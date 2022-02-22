@@ -3,8 +3,8 @@ module github.com/aserto-dev/idp-plugin-sdk/examples/dummy
 go 1.17
 
 require (
-	github.com/aserto-dev/go-grpc v0.0.33
-	github.com/aserto-dev/idp-plugin-sdk v0.0.6
+	github.com/aserto-dev/go-grpc v0.8.2
+	github.com/aserto-dev/idp-plugin-sdk v0.8.0
 )
 
 require (

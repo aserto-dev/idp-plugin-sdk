@@ -1,7 +1,6 @@
 package plugin
 
 import (
-	"fmt"
 	"io"
 	"log"
 
@@ -20,16 +19,7 @@ func (s AsertoPluginServer) Export(req *proto.ExportRequest, srv proto.Plugin_Ex
 		close(errc)
 		<-errDone
 
-		if !pluginClosed {
-			_, err := s.PluginHandler.Close()
-			if err != nil {
-				log.Println(err.Error())
-			}
-		}
-
-		if r := recover(); r != nil {
-			log.Println(fmt.Errorf("recovering from panic in Export error is: %v", r))
-		}
+		s.cleanup(pluginClosed, "Export")
 	}()
 
 	go func() {
@@ -56,19 +46,19 @@ func (s AsertoPluginServer) Export(req *proto.ExportRequest, srv proto.Plugin_Ex
 		}
 	}()
 
-	cfg := s.PluginHandler.GetConfig()
+	cfg := s.Handler.GetConfig()
 	err := config.NewConfig(req.GetConfig(), cfg)
 	if err != nil {
 		return err
 	}
 
-	err = s.PluginHandler.Open(cfg, OperationTypeRead)
+	err = s.Handler.Open(cfg, OperationTypeRead)
 	if err != nil {
 		return err
 	}
 
 	for {
-		users, err := s.PluginHandler.Read()
+		users, err := s.Handler.Read()
 		if err == io.EOF {
 			break
 		}
@@ -95,7 +85,7 @@ func (s AsertoPluginServer) Export(req *proto.ExportRequest, srv proto.Plugin_Ex
 		}
 	}
 
-	_, err = s.PluginHandler.Close()
+	_, err = s.Handler.Close()
 	if err != nil {
 		errc <- err
 	}
