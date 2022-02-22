@@ -21,7 +21,7 @@ const (
 	OperationTypeDelete
 )
 
-type PluginHandler interface {
+type PluginHandler interface { //nolint : revive // TBD remove stutter
 	GetConfig() PluginConfig
 	Open(PluginConfig, OperationType) error
 	Read() ([]*api.User, error)
@@ -31,7 +31,7 @@ type PluginHandler interface {
 	GetVersion() (string, string, string)
 }
 
-type PluginConfig interface {
+type PluginConfig interface { //nolint : revive // TBD remove stutter
 	Validate(OperationType) error
 	Description() string
 }
@@ -52,7 +52,7 @@ func (s AsertoPluginServer) Validate(ctx context.Context, req *proto.ValidateReq
 	if opType == proto.OperationType_OPERATION_TYPE_UNKNOWN {
 		return response, status.Error(codes.InvalidArgument, "unknown operation type provided")
 	}
-	opTypePlugin := (OperationType)(opType - 1)
+	opTypePlugin := OperationType(opType - 1)
 
 	return response, cfg.Validate(opTypePlugin)
 }

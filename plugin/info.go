@@ -11,7 +11,7 @@ import (
 func (s AsertoPluginServer) Info(ctx context.Context, req *proto.InfoRequest) (*proto.InfoResponse, error) {
 	cfg := s.PluginHandler.GetConfig()
 
-	conf, err := config.ParseApiConfig(cfg)
+	conf, err := config.ParseAPIConfig(cfg)
 	if err != nil {
 		return nil, err
 	}

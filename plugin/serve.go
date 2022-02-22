@@ -5,7 +5,7 @@ import (
 	plugin "github.com/hashicorp/go-plugin"
 )
 
-type PluginOptions struct {
+type PluginOptions struct { //nolint : revive // TBD remove stutter
 	PluginHandler PluginHandler
 }
 

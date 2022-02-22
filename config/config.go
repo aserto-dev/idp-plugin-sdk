@@ -26,7 +26,7 @@ func NewConfig(pbStruct *structpb.Struct, v interface{}) error {
 	return nil
 }
 
-func ParseApiConfig(cfg interface{}) ([]*api.ConfigElement, error) {
+func ParseAPIConfig(cfg interface{}) ([]*api.ConfigElement, error) {
 	v := reflect.ValueOf(cfg)
 
 	if v.Kind() == reflect.Ptr {

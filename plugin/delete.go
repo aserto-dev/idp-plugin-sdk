@@ -77,8 +77,8 @@ func (s AsertoPluginServer) Delete(srv proto.Plugin_DeleteServer) error {
 			initialized = true
 		}
 
-		if userId := req.GetUserId(); userId != "" {
-			err := s.PluginHandler.Delete(userId)
+		if userID := req.GetUserId(); userID != "" {
+			err := s.PluginHandler.Delete(userID)
 			if err != nil {
 				errc <- err
 			}

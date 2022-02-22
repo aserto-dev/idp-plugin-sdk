@@ -11,7 +11,7 @@ import (
 	status "google.golang.org/genproto/googleapis/rpc/status"
 )
 
-func (s AsertoPluginServer) Import(srv proto.Plugin_ImportServer) error {
+func (s AsertoPluginServer) Import(srv proto.Plugin_ImportServer) error { //nolint : funlen // tbd
 	errc := make(chan error, 128)
 	errDone := make(chan struct{}, 1)
 	pluginClosed := false

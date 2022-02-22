@@ -26,10 +26,10 @@ func TestDeleteNoUsers(t *testing.T) {
 	deleteServer.EXPECT().Recv().Return(nil, io.EOF)
 	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Close().Return(nil, nil)
 
-	//Act
+	// Act
 	err := pluginServer.Delete(deleteServer)
 
-	//Assert
+	// Assert
 	assert.NoError(err)
 }
 
@@ -41,7 +41,7 @@ func TestDeleteNoUsersFailClose(t *testing.T) {
 	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
 	pluginConfig := mocks.NewMockPluginConfig(ctrl)
 	deleteServer := mocks.NewMockPlugin_DeleteServer(ctrl)
-	boomErr := errors.New("Boom!")
+	boomErr := errors.New("#boom#")
 	deleteResp := &proto.DeleteResponse{Error: &status.Status{Message: boomErr.Error()}}
 
 	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
@@ -49,10 +49,10 @@ func TestDeleteNoUsersFailClose(t *testing.T) {
 	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Close().Return(nil, boomErr)
 	deleteServer.EXPECT().Send(deleteResp).Return(nil)
 
-	//Act
+	// Act
 	err := pluginServer.Delete(deleteServer)
 
-	//Assert
+	// Assert
 	assert.NoError(err)
 }
 
@@ -64,7 +64,7 @@ func TestDeleteReceiveError(t *testing.T) {
 	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
 	pluginConfig := mocks.NewMockPluginConfig(ctrl)
 	deleteServer := mocks.NewMockPlugin_DeleteServer(ctrl)
-	boomErr := errors.New("Boom!")
+	boomErr := errors.New("#boom#")
 	deleteResp := &proto.DeleteResponse{Error: &status.Status{Message: boomErr.Error()}}
 
 	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
@@ -72,10 +72,10 @@ func TestDeleteReceiveError(t *testing.T) {
 	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Close().Return(nil, nil)
 	deleteServer.EXPECT().Send(deleteResp).Return(nil)
 
-	//Act
+	// Act
 	err := pluginServer.Delete(deleteServer)
 
-	//Assert
+	// Assert
 	assert.NoError(err)
 }
 
@@ -96,10 +96,10 @@ func TestDeleteWithUserIdEmpty(t *testing.T) {
 	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Open(pluginConfig, plugin.OperationTypeDelete).Return(nil).Times(1)
 	deleteServer.EXPECT().Recv().Return(nil, io.EOF)
 
-	//Act
+	// Act
 	err := pluginServer.Delete(deleteServer)
 
-	//Assert
+	// Assert
 	assert.NoError(err)
 }
 
@@ -122,9 +122,9 @@ func TestDeleteWithUserId(t *testing.T) {
 	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Delete("testUUID").Return(nil).Times(1)
 	deleteServer.EXPECT().Recv().Return(nil, io.EOF)
 
-	//Act
+	// Act
 	err := pluginServer.Delete(deleteServer)
 
-	//Assert
+	// Assert
 	assert.NoError(err)
 }

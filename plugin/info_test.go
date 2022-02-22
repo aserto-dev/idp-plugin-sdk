@@ -23,10 +23,10 @@ func TestInfoFail(t *testing.T) {
 	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetVersion().Return("", "date", "")
 	pluginConfig.EXPECT().Description().Return("This is a description")
 
-	//Act
+	// Act
 	resp, err := pluginServer.Info(context.Background(), req)
 
-	//Assert
+	// Assert
 	assert.NoError(err)
 	assert.NotNil(resp)
 	assert.Equal(resp.GetDescription(), "This is a description")
