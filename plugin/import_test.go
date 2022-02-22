@@ -18,14 +18,14 @@ func TestImportNoUsers(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
-	pluginConfig := mocks.NewMockPluginConfig(ctrl)
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
+	pluginConfig := mocks.NewMockConfig(ctrl)
 	importServer := mocks.NewMockPlugin_ImportServer(ctrl)
 
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(pluginConfig)
 	importServer.EXPECT().Recv().Return(nil, io.EOF)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Close().Return(nil, nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Close().Return(nil, nil)
 
 	// Act
 	err := pluginServer.Import(importServer)
@@ -38,16 +38,16 @@ func TestImportNoUsersFailClose(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
-	pluginConfig := mocks.NewMockPluginConfig(ctrl)
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
+	pluginConfig := mocks.NewMockConfig(ctrl)
 	importServer := mocks.NewMockPlugin_ImportServer(ctrl)
 	boomErr := errors.New("#boom#")
 	importResp := &proto.ImportResponse{Error: &status.Status{Message: boomErr.Error()}}
 
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(pluginConfig)
 	importServer.EXPECT().Recv().Return(nil, io.EOF)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Close().Return(nil, boomErr)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Close().Return(nil, boomErr)
 	importServer.EXPECT().Send(importResp).Return(nil)
 
 	// Act
@@ -61,16 +61,16 @@ func TestImportReceiveError(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
-	pluginConfig := mocks.NewMockPluginConfig(ctrl)
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
+	pluginConfig := mocks.NewMockConfig(ctrl)
 	importServer := mocks.NewMockPlugin_ImportServer(ctrl)
 	boomErr := errors.New("#boom#")
 	importResp := &proto.ImportResponse{Error: &status.Status{Message: boomErr.Error()}}
 
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(pluginConfig)
 	importServer.EXPECT().Recv().Return(nil, boomErr)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Close().Return(nil, nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Close().Return(nil, nil)
 	importServer.EXPECT().Send(importResp).Return(nil)
 
 	// Act
@@ -84,17 +84,17 @@ func TestImportWithNilUser(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
-	pluginConfig := mocks.NewMockPluginConfig(ctrl)
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
+	pluginConfig := mocks.NewMockConfig(ctrl)
 	importServer := mocks.NewMockPlugin_ImportServer(ctrl)
 	importResp := &proto.ImportResponse{Error: nil}
 
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(pluginConfig)
 	importServer.EXPECT().Recv().Return(nil, nil)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Close().Return(nil, nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Close().Return(nil, nil)
 	importServer.EXPECT().Send(importResp).Return(nil).AnyTimes()
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Open(pluginConfig, plugin.OperationTypeWrite).Return(nil).Times(1)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Open(pluginConfig, plugin.OperationTypeWrite).Return(nil).Times(1)
 	importServer.EXPECT().Recv().Return(nil, io.EOF)
 
 	// Act
@@ -108,22 +108,22 @@ func TestImportWithUser(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
-	pluginConfig := mocks.NewMockPluginConfig(ctrl)
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
+	pluginConfig := mocks.NewMockConfig(ctrl)
 	importServer := mocks.NewMockPlugin_ImportServer(ctrl)
 	importResp := &proto.ImportResponse{Error: nil}
 	user := &api.User{Id: "testID"}
 	importReq := &proto.ImportRequest{Data: &proto.ImportRequest_User{User: user}}
 	stats := &plugin.Stats{Received: 1, Created: 1}
 
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(pluginConfig)
 	importServer.EXPECT().Recv().Return(importReq, nil)
 	importServer.EXPECT().Send(importResp).Return(nil).AnyTimes()
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Open(pluginConfig, plugin.OperationTypeWrite).Return(nil).Times(1)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Write(user).Return(nil).Times(1)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Open(pluginConfig, plugin.OperationTypeWrite).Return(nil).Times(1)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Write(user).Return(nil).Times(1)
 	importServer.EXPECT().Recv().Return(nil, io.EOF)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Close().Return(stats, nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Close().Return(stats, nil)
 	importServer.EXPECT().Send(gomock.Any()).Return(nil).AnyTimes()
 
 	// Act

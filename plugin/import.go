@@ -1,7 +1,6 @@
 package plugin
 
 import (
-	"fmt"
 	"io"
 	"log"
 
@@ -11,7 +10,7 @@ import (
 	status "google.golang.org/genproto/googleapis/rpc/status"
 )
 
-func (s AsertoPluginServer) Import(srv proto.Plugin_ImportServer) error { //nolint : funlen // tbd
+func (s AsertoPluginServer) Import(srv proto.Plugin_ImportServer) error {
 	errc := make(chan error, 128)
 	errDone := make(chan struct{}, 1)
 	pluginClosed := false
@@ -20,20 +19,11 @@ func (s AsertoPluginServer) Import(srv proto.Plugin_ImportServer) error { //noli
 		close(errc)
 		<-errDone
 
-		if !pluginClosed {
-			_, err := s.PluginHandler.Close()
-			if err != nil {
-				log.Println(err.Error())
-			}
-		}
-
-		if r := recover(); r != nil {
-			log.Println(fmt.Errorf("recovering from panic in Import error is: %v", r))
-		}
+		s.cleanup(pluginClosed, "Import")
 	}()
 
 	initialized := false
-	cfg := s.PluginHandler.GetConfig()
+	cfg := s.Handler.GetConfig()
 
 	go func() {
 		defer close(errDone)
@@ -72,7 +62,7 @@ func (s AsertoPluginServer) Import(srv proto.Plugin_ImportServer) error { //noli
 			if err != nil {
 				return err
 			}
-			err := s.PluginHandler.Open(cfg, OperationTypeWrite)
+			err := s.Handler.Open(cfg, OperationTypeWrite)
 			if err != nil {
 				return err
 			}
@@ -80,34 +70,36 @@ func (s AsertoPluginServer) Import(srv proto.Plugin_ImportServer) error { //noli
 		}
 
 		if user := req.GetUser(); user != nil {
-			err := s.PluginHandler.Write(user)
+			err := s.Handler.Write(user)
 			if err != nil {
 				errc <- err
 			}
 		}
 	}
 
-	stats, err := s.PluginHandler.Close()
+	stats, err := s.Handler.Close()
 	if err != nil {
 		errc <- err
 	}
 
 	pluginClosed = true
 	if stats != nil {
-		err = srv.Send(
-			&proto.ImportResponse{
-				Stats: &api.UserProcessStats{
-					Received: stats.Received,
-					Created:  stats.Created,
-					Updated:  stats.Updated,
-					Deleted:  stats.Deleted,
-					Errors:   stats.Errors,
-				}},
-		)
+		err = srv.Send(constructResponse(stats))
 		if err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
+
+func constructResponse(stats *Stats) *proto.ImportResponse {
+	return &proto.ImportResponse{
+		Stats: &api.UserProcessStats{
+			Received: stats.Received,
+			Created:  stats.Created,
+			Updated:  stats.Updated,
+			Deleted:  stats.Deleted,
+			Errors:   stats.Errors,
+		}}
 }

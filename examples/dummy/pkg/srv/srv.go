@@ -33,7 +33,7 @@ func NewDummyPlugin() *DummyPlugin {
 	return &DummyPlugin{}
 }
 
-func (s DummyPlugin) GetConfig() plugin.PluginConfig {
+func (s DummyPlugin) GetConfig() plugin.Config {
 	return &DummyPluginConfig{}
 }
 
@@ -41,7 +41,7 @@ func (s DummyPlugin) GetVersion() (string, string, string) {
 	return "0.0.1", time.Now().UTC().Format(time.RFC3339), ""
 }
 
-func (s DummyPlugin) Open(config plugin.PluginConfig, operation plugin.OperationType) error {
+func (s DummyPlugin) Open(config plugin.Config, operation plugin.OperationType) error {
 	log.Println("Open()")
 	return nil
 }

@@ -11,8 +11,8 @@ func main() {
 
 	dummyPlugin := srv.NewDummyPlugin()
 
-	options := &plugin.PluginOptions{
-		PluginHandler: dummyPlugin,
+	options := &plugin.Options{
+		Handler: dummyPlugin,
 	}
 
 	err := plugin.Serve(options)

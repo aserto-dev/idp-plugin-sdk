@@ -12,3 +12,9 @@ go:
   goreleaser:
     importPath: github.com/goreleaser/goreleaser
     version: "v1.5.0"
+  mockgen:
+    importPath: github.com/golang/mock/mockgen
+    version: "v1.6.0"
+  wire:
+    importPath: github.com/google/wire/cmd/wire
+    version: "v0.5.0"

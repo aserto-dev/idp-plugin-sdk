@@ -5,8 +5,8 @@ import (
 	plugin "github.com/hashicorp/go-plugin"
 )
 
-type PluginOptions struct { //nolint : revive // TBD remove stutter
-	PluginHandler PluginHandler
+type Options struct {
+	Handler Handler
 }
 
 // Handshake is a common handshake that is shared by plugin and host.
@@ -22,11 +22,11 @@ var PluginMap = plugin.PluginSet{
 	"idp-plugin": &grpcplugin.PluginGRPC{},
 }
 
-func Serve(options *PluginOptions) error {
+func Serve(options *Options) error {
 	pSet := make(plugin.PluginSet)
 	pSet["idp-plugin"] = &grpcplugin.PluginGRPC{
 		Impl: &AsertoPluginServer{
-			PluginHandler: options.PluginHandler,
+			Handler: options.Handler,
 		},
 	}
 	plugin.Serve(&plugin.ServeConfig{

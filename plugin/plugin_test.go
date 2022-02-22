@@ -15,10 +15,10 @@ import (
 func TestValidateFailParseConfig(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
-	handler := mocks.NewMockPluginHandler(gomock.NewController(t))
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
+	handler := mocks.NewMockHandler(gomock.NewController(t))
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
 	req := &proto.ValidateRequest{}
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(nil)
 
 	// Act
 	_, err := pluginServer.Validate(context.Background(), req)
@@ -31,11 +31,11 @@ func TestValidateUnknownOperationType(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
-	pluginConfig := mocks.NewMockPluginConfig(ctrl)
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
+	pluginConfig := mocks.NewMockConfig(ctrl)
 	req := &proto.ValidateRequest{OpType: proto.OperationType_OPERATION_TYPE_UNKNOWN}
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(pluginConfig)
 
 	// Act
 	_, err := pluginServer.Validate(context.Background(), req)
@@ -48,11 +48,11 @@ func TestValidate(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
-	pluginConfig := mocks.NewMockPluginConfig(ctrl)
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
+	pluginConfig := mocks.NewMockConfig(ctrl)
 	req := &proto.ValidateRequest{OpType: proto.OperationType_OPERATION_TYPE_IMPORT}
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(pluginConfig)
 	pluginConfig.EXPECT().Validate(plugin.OperationTypeWrite).Return(nil)
 
 	// Act
@@ -66,11 +66,11 @@ func TestValidateFail(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
-	pluginConfig := mocks.NewMockPluginConfig(ctrl)
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
+	pluginConfig := mocks.NewMockConfig(ctrl)
 	req := &proto.ValidateRequest{OpType: proto.OperationType_OPERATION_TYPE_IMPORT}
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(pluginConfig)
 	pluginConfig.EXPECT().Validate(plugin.OperationTypeWrite).Return(errors.New("#boom#"))
 
 	// Act

@@ -1,7 +1,6 @@
 package plugin
 
 import (
-	"fmt"
 	"io"
 	"log"
 
@@ -19,20 +18,11 @@ func (s AsertoPluginServer) Delete(srv proto.Plugin_DeleteServer) error {
 		close(errc)
 		<-errDone
 
-		if !pluginClosed {
-			_, err := s.PluginHandler.Close()
-			if err != nil {
-				log.Println(err.Error())
-			}
-		}
-
-		if r := recover(); r != nil {
-			log.Println(fmt.Errorf("recovering from panic in Delete error is: %v", r))
-		}
+		s.cleanup(pluginClosed, "Delete")
 	}()
 
 	initialized := false
-	cfg := s.PluginHandler.GetConfig()
+	cfg := s.Handler.GetConfig()
 
 	go func() {
 		defer close(errDone)
@@ -70,7 +60,7 @@ func (s AsertoPluginServer) Delete(srv proto.Plugin_DeleteServer) error {
 			if err != nil {
 				return err
 			}
-			err := s.PluginHandler.Open(cfg, OperationTypeDelete)
+			err := s.Handler.Open(cfg, OperationTypeDelete)
 			if err != nil {
 				return err
 			}
@@ -78,14 +68,14 @@ func (s AsertoPluginServer) Delete(srv proto.Plugin_DeleteServer) error {
 		}
 
 		if userID := req.GetUserId(); userID != "" {
-			err := s.PluginHandler.Delete(userID)
+			err := s.Handler.Delete(userID)
 			if err != nil {
 				errc <- err
 			}
 		}
 	}
 
-	_, err := s.PluginHandler.Close()
+	_, err := s.Handler.Close()
 	if err != nil {
 		errc <- err
 	}

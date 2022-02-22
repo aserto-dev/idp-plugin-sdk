@@ -17,13 +17,13 @@ func TestExportNoConfig(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
 	exportServer := mocks.NewMockPlugin_ExportServer(ctrl)
 	exportReq := &proto.ExportRequest{Config: nil}
 
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(nil)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Close().Return(nil, nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Close().Return(nil, nil)
 
 	// Act
 	err := pluginServer.Export(exportReq, exportServer)
@@ -36,16 +36,16 @@ func TestExportOpenErrors(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
-	pluginConfig := mocks.NewMockPluginConfig(ctrl)
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
+	pluginConfig := mocks.NewMockConfig(ctrl)
 	exportServer := mocks.NewMockPlugin_ExportServer(ctrl)
 	boomErr := errors.New("#boom#")
 	exportReq := &proto.ExportRequest{Config: nil}
 
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Open(gomock.Any(), plugin.OperationTypeRead).Return(boomErr)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Close().Return(nil, nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(pluginConfig)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Open(gomock.Any(), plugin.OperationTypeRead).Return(boomErr)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Close().Return(nil, nil)
 
 	// Act
 	err := pluginServer.Export(exportReq, exportServer)
@@ -58,16 +58,16 @@ func TestExportNoUsers(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
-	pluginConfig := mocks.NewMockPluginConfig(ctrl)
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
+	pluginConfig := mocks.NewMockConfig(ctrl)
 	exportServer := mocks.NewMockPlugin_ExportServer(ctrl)
 	exportReq := &proto.ExportRequest{Config: nil}
 
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Open(gomock.Any(), plugin.OperationTypeRead).Return(nil)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Read().Return(nil, io.EOF)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Close().Return(nil, nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(pluginConfig)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Open(gomock.Any(), plugin.OperationTypeRead).Return(nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Read().Return(nil, io.EOF)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Close().Return(nil, nil)
 
 	// Act
 	err := pluginServer.Export(exportReq, exportServer)
@@ -80,18 +80,18 @@ func TestExportWhenReadFails(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
-	pluginConfig := mocks.NewMockPluginConfig(ctrl)
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
+	pluginConfig := mocks.NewMockConfig(ctrl)
 	exportServer := mocks.NewMockPlugin_ExportServer(ctrl)
 	boomErr := errors.New("#boom#")
 	exportReq := &proto.ExportRequest{Config: nil}
 
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Open(gomock.Any(), plugin.OperationTypeRead).Return(nil)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Read().Return(nil, boomErr)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(pluginConfig)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Open(gomock.Any(), plugin.OperationTypeRead).Return(nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Read().Return(nil, boomErr)
 	exportServer.EXPECT().Send(gomock.Any()).Return(boomErr)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Close().Return(nil, nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Close().Return(nil, nil)
 
 	// Act
 	err := pluginServer.Export(exportReq, exportServer)
@@ -104,9 +104,9 @@ func TestExportOneUser(t *testing.T) {
 	// Arrange
 	assert := require.New(t)
 	ctrl := gomock.NewController(t)
-	handler := mocks.NewMockPluginHandler(ctrl)
-	pluginServer := &plugin.AsertoPluginServer{PluginHandler: handler}
-	pluginConfig := mocks.NewMockPluginConfig(ctrl)
+	handler := mocks.NewMockHandler(ctrl)
+	pluginServer := &plugin.AsertoPluginServer{Handler: handler}
+	pluginConfig := mocks.NewMockConfig(ctrl)
 	exportServer := mocks.NewMockPlugin_ExportServer(ctrl)
 	exportReq := &proto.ExportRequest{Config: nil}
 	user := &api.User{Id: "testID"}
@@ -118,12 +118,12 @@ func TestExportOneUser(t *testing.T) {
 		},
 	}
 
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().GetConfig().Return(pluginConfig)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Open(gomock.Any(), plugin.OperationTypeRead).Return(nil)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Read().Return(users, nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().GetConfig().Return(pluginConfig)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Open(gomock.Any(), plugin.OperationTypeRead).Return(nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Read().Return(users, nil)
 	exportServer.EXPECT().Send(expResp).Return(nil)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Read().Return(nil, io.EOF)
-	pluginServer.PluginHandler.(*mocks.MockPluginHandler).EXPECT().Close().Return(nil, nil)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Read().Return(nil, io.EOF)
+	pluginServer.Handler.(*mocks.MockHandler).EXPECT().Close().Return(nil, nil)
 
 	// Act
 	err := pluginServer.Export(exportReq, exportServer)
