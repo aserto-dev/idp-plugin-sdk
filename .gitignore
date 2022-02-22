@@ -15,3 +15,5 @@
 # vendor/
 dist/*
 .ext/*
+
+/plugin/mock_*.go

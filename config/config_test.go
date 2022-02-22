@@ -37,7 +37,7 @@ func TestNewConfig(t *testing.T) {
 func TestApiConfig(t *testing.T) {
 	assert := require.New(t)
 
-	cfg, err := ParseApiConfig(TestConfig{})
+	cfg, err := ParseAPIConfig(TestConfig{})
 	assert.Nil(err)
 	assert.NotNil(cfg)
 	assert.Equal(4, len(cfg))
@@ -46,7 +46,7 @@ func TestApiConfig(t *testing.T) {
 func TestParameterName(t *testing.T) {
 	assert := require.New(t)
 
-	cfg, err := ParseApiConfig(TestConfig{})
+	cfg, err := ParseAPIConfig(TestConfig{})
 	assert.Nil(err)
 	assert.NotNil(cfg)
 	assert.Equal(4, len(cfg))
@@ -66,7 +66,7 @@ func TestParameterTagMissing(t *testing.T) {
 
 	assert := require.New(t)
 
-	cfg, err := ParseApiConfig(ConfigNoName{})
+	cfg, err := ParseAPIConfig(ConfigNoName{})
 	assert.Nil(err)
 	assert.NotNil(cfg)
 	assert.Equal(3, len(cfg))
