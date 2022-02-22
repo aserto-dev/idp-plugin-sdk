@@ -6,27 +6,13 @@ import (
 	"time"
 
 	api "github.com/aserto-dev/go-grpc/aserto/api/v1"
+	"github.com/aserto-dev/idp-plugin-sdk/examples/dummy/pkg/config"
 	"github.com/aserto-dev/idp-plugin-sdk/plugin"
 )
 
 type DummyPlugin struct {
-	Config    DummyPluginConfig
+	Config    config.DummyPluginConfig
 	Operation plugin.OperationType
-}
-
-type DummyPluginConfig struct {
-	IntValue    int    `description:"int value" kind:"attribute" mode:"normal" readonly:"false" name:"int_value"`
-	StringValue string `description:"string value" kind:"secret" mode:"masked" readonly:"false" name:"string_value"`
-}
-
-func (c *DummyPluginConfig) Validate(opType plugin.OperationType) error {
-	log.Printf("Validating %d", c.IntValue)
-	log.Printf("Validating %s", c.StringValue)
-	return nil
-}
-
-func (c *DummyPluginConfig) Description() string {
-	return "dummy plugin"
 }
 
 func NewDummyPlugin() *DummyPlugin {
@@ -34,7 +20,7 @@ func NewDummyPlugin() *DummyPlugin {
 }
 
 func (s DummyPlugin) GetConfig() plugin.Config {
-	return &DummyPluginConfig{}
+	return &config.DummyPluginConfig{}
 }
 
 func (s DummyPlugin) GetVersion() (string, string, string) {
