@@ -62,6 +62,10 @@ jobs:
       - name: Test
         run: |
           go run mage.go test
+      - name: Build Dummy Plugin
+        run: |
+          cd examples/dummy/
+          go build ./...
       - name: Upload code coverage
         uses: shogo82148/actions-goveralls@v1
         continue-on-error: true

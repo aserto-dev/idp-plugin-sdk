@@ -9,7 +9,6 @@ import (
 	"github.com/aserto-dev/mage-loot/common"
 	"github.com/aserto-dev/mage-loot/deps"
 	"github.com/magefile/mage/mg"
-	"github.com/magefile/mage/sh"
 )
 
 func init() {
@@ -27,19 +26,9 @@ func Generate() error {
 	})
 }
 
-func Build() error {
-	return sh.RunV("go", "build", "./...")
-}
-
 // Cleans the bin director
 func Clean() error {
 	return os.RemoveAll("dist")
-}
-
-// BuildAll builds all binaries in ./cmd for
-// all configured operating systems and architectures.
-func BuildAll() error {
-	return common.BuildAll()
 }
 
 func Deps() {
@@ -60,6 +49,6 @@ func Test() error {
 // The targets are run in the following order:
 // deps, generate, lint, test, build, dockerImage
 func All() error {
-	mg.SerialDeps(Deps, Generate, Lint, Test, Build)
+	mg.SerialDeps(Deps, Generate, Lint, Test)
 	return nil
 }

@@ -2,6 +2,8 @@ module github.com/aserto-dev/idp-plugin-sdk/examples/dummy
 
 go 1.17
 
+replace github.com/aserto-dev/idp-plugin-sdk => ../../../idp-plugin-sdk
+
 require (
 	github.com/aserto-dev/go-grpc v0.8.2
 	github.com/aserto-dev/idp-plugin-sdk v0.8.1
