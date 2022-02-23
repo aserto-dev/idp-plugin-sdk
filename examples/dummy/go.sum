@@ -40,8 +40,6 @@ github.com/aserto-dev/clui v0.7.0/go.mod h1:XpJxwNzSQaGN6rqXONZJEaeez4MUaCPikM2l
 github.com/aserto-dev/clui v0.8.0/go.mod h1:XpJxwNzSQaGN6rqXONZJEaeez4MUaCPikM2lKSngrXM=
 github.com/aserto-dev/go-grpc v0.8.2 h1:CVWhTaHK3go2uDwrVqx/uwryongPsOlNlbK/uM9kY7o=
 github.com/aserto-dev/go-grpc v0.8.2/go.mod h1:hog+zu5jE3+Y6t7m5PIBlavosmbd2qdF0BGZ9ueWK74=
-github.com/aserto-dev/idp-plugin-sdk v0.8.1 h1:k43FmuQBp262WBoIU7k6BzwQWjQT9JmS0fMKbuzCbh0=
-github.com/aserto-dev/idp-plugin-sdk v0.8.1/go.mod h1:cBTsoAe3w4AEWE11OeA8IjDpF6SNuSGbHwNtjr4p5hQ=
 github.com/aserto-dev/mage-loot v0.7.0/go.mod h1:MFtnaY7g3ghhVU4okmIDQ1P6GVECib0gp6nC29NBQ2U=
 github.com/aserto-dev/mage-loot v0.8.1/go.mod h1:HIdbGTB/JdyEjV9d2dmPMQeqQ1CU21XN3iTOLPBAmeg=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
