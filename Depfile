@@ -8,7 +8,7 @@ go:
     version: "v1.7.0"
   golangci-lint:
     importPath: "github.com/golangci/golangci-lint/cmd/golangci-lint"
-    version: "v1.44.2"
+    version: "v1.45.2"
   mockgen:
     importPath: github.com/golang/mock/mockgen
     version: "v1.6.0"
