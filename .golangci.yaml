@@ -77,7 +77,7 @@ linters:
     - dogsled
     - errcheck
     - exportloopref
-    - exhaustive
+    #- exhaustive // temporary disabled
     - funlen
     - gochecknoinits
     - goconst
