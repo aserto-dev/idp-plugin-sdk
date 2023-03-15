@@ -13,17 +13,17 @@ import (
 
 func init() {
 	// Set go version for docker builds
-	os.Setenv("GO_VERSION", "1.17")
+	os.Setenv("GO_VERSION", "1.19")
 	// Set private repositories
 	os.Setenv("GOPRIVATE", "github.com/aserto-dev")
 }
 
 // Generate generates all code.
 func Generate() error {
-	return common.GenerateWith([]string{
+	return common.Generate([]string{
 		filepath.Dir(deps.GoBinPath("mockgen")),
 		filepath.Dir(deps.GoBinPath("wire")),
-	})
+	}...)
 }
 
 // Cleans the bin director

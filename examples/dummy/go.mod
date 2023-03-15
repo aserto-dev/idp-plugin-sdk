@@ -1,6 +1,6 @@
 module github.com/aserto-dev/idp-plugin-sdk/examples/dummy
 
-go 1.17
+go 1.19
 
 replace github.com/aserto-dev/idp-plugin-sdk => ../../../idp-plugin-sdk
 
