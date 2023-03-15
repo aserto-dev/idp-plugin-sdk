@@ -18,6 +18,7 @@ type HCLogger struct {
 	log     *zerolog.Logger
 	implied []interface{}
 	name    string
+	level   hclog.Level
 }
 
 // NewHCLogger creates a HCLogger.
@@ -30,6 +31,7 @@ func NewHCLogger(zlog *zerolog.Logger) hclog.Logger {
 func (l *HCLogger) Log(level hclog.Level, msg string, args ...interface{}) {
 
 	message := l.formatMesage(msg, args...)
+
 	switch level { //nolint:exhaustive
 	case hclog.Trace:
 		l.log.Trace().Msg(message)
@@ -151,7 +153,12 @@ func (l *HCLogger) ResetNamed(name string) hclog.Logger {
 // unless they were created with IndependentLevels. If an
 // implementation cannot update the level on the fly, it should no-op.
 func (l *HCLogger) SetLevel(level hclog.Level) {
-	// noop
+	l.level = level
+}
+
+// Returns the current level.
+func (l *HCLogger) GetLevel() hclog.Level {
+	return l.level
 }
 
 // Return a value that conforms to the stdlib log.Logger interface.
