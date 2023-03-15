@@ -13,24 +13,26 @@ import (
 	"github.com/rs/zerolog"
 )
 
-// HCLogger is a HC logger that uses zerolog
+// HCLogger is a HC logger that uses zerolog.
 type HCLogger struct {
 	log     *zerolog.Logger
 	implied []interface{}
 	name    string
+	level   hclog.Level
 }
 
-// NewHCLogger creates a HCLogger
+// NewHCLogger creates a HCLogger.
 func NewHCLogger(zlog *zerolog.Logger) hclog.Logger {
 	hclLogger := zlog.With().Str("log-source", "hc").Logger()
 	return &HCLogger{log: &hclLogger}
 }
 
-// Emit a message and key/value pairs at a provided log level
+// Emit a message and key/value pairs at a provided log level.
 func (l *HCLogger) Log(level hclog.Level, msg string, args ...interface{}) {
 
 	message := l.formatMesage(msg, args...)
-	switch level {
+
+	switch level { //nolint:exhaustive
 	case hclog.Trace:
 		l.log.Trace().Msg(message)
 	case hclog.Debug:
@@ -42,31 +44,31 @@ func (l *HCLogger) Log(level hclog.Level, msg string, args ...interface{}) {
 	case hclog.Error:
 		l.log.Error().Msg(message)
 	default:
-		// TODO: Handle hclog.NoLevel
+		// TODO: Handle hclog.NoLevel.
 	}
 }
 
-// Emit a message and key/value pairs at the TRACE level
+// Emit a message and key/value pairs at the TRACE level.
 func (l *HCLogger) Trace(msg string, args ...interface{}) {
 	l.Log(hclog.Trace, msg, args...)
 }
 
-// Emit a message and key/value pairs at the DEBUG level
+// Emit a message and key/value pairs at the DEBUG level.
 func (l *HCLogger) Debug(msg string, args ...interface{}) {
 	l.Log(hclog.Debug, msg, args...)
 }
 
-// Emit a message and key/value pairs at the INFO level
+// Emit a message and key/value pairs at the INFO level.
 func (l *HCLogger) Info(msg string, args ...interface{}) {
 	l.Log(hclog.Info, msg, args...)
 }
 
-// Emit a message and key/value pairs at the WARN level
+// Emit a message and key/value pairs at the WARN level.
 func (l *HCLogger) Warn(msg string, args ...interface{}) {
 	l.Log(hclog.Warn, msg, args...)
 }
 
-// Emit a message and key/value pairs at the ERROR level
+// Emit a message and key/value pairs at the ERROR level.
 func (l *HCLogger) Error(msg string, args ...interface{}) {
 	l.Log(hclog.Error, msg, args...)
 }
@@ -77,33 +79,33 @@ func (l *HCLogger) IsTrace() bool {
 	return l.log.GetLevel() == zerolog.TraceLevel
 }
 
-// Indicate if DEBUG logs would be emitted. This and the other Is* guards
+// Indicate if DEBUG logs would be emitted. This and the other Is* guards.
 func (l *HCLogger) IsDebug() bool {
 	return l.log.GetLevel() == zerolog.DebugLevel
 }
 
-// Indicate if INFO logs would be emitted. This and the other Is* guards
+// Indicate if INFO logs would be emitted. This and the other Is* guards.
 func (l *HCLogger) IsInfo() bool {
 	return l.log.GetLevel() == zerolog.InfoLevel
 }
 
-// Indicate if WARN logs would be emitted. This and the other Is* guards
+// Indicate if WARN logs would be emitted. This and the other Is* guards.
 func (l *HCLogger) IsWarn() bool {
 	return l.log.GetLevel() == zerolog.WarnLevel
 }
 
-// Indicate if ERROR logs would be emitted. This and the other Is* guards
+// Indicate if ERROR logs would be emitted. This and the other Is* guards.
 func (l *HCLogger) IsError() bool {
 	return l.log.GetLevel() == zerolog.ErrorLevel
 }
 
-// ImpliedArgs returns With key/value pairs
+// ImpliedArgs returns With key/value pairs.
 func (l *HCLogger) ImpliedArgs() []interface{} {
 	// Not implemented
 	return l.implied
 }
 
-// Creates a sublogger that will always have the given key/value pairs
+// Creates a sublogger that will always have the given key/value pairs.
 func (l *HCLogger) With(args ...interface{}) hclog.Logger {
 	var stringArgs []string
 	for _, args := range args {
@@ -117,7 +119,7 @@ func (l *HCLogger) With(args ...interface{}) hclog.Logger {
 	}
 }
 
-// Returns the Name of the logger
+// Returns the Name of the logger.
 func (l *HCLogger) Name() string {
 	return l.name
 }
@@ -151,15 +153,20 @@ func (l *HCLogger) ResetNamed(name string) hclog.Logger {
 // unless they were created with IndependentLevels. If an
 // implementation cannot update the level on the fly, it should no-op.
 func (l *HCLogger) SetLevel(level hclog.Level) {
-	// noop
+	l.level = level
 }
 
-// Return a value that conforms to the stdlib log.Logger interface
+// Returns the current level.
+func (l *HCLogger) GetLevel() hclog.Level {
+	return l.level
+}
+
+// Return a value that conforms to the stdlib log.Logger interface.
 func (l *HCLogger) StandardLogger(opts *hclog.StandardLoggerOptions) *slog.Logger {
 	return nil
 }
 
-// Return a value that conforms to io.Writer, which can be passed into log.SetOutput()
+// Return a value that conforms to io.Writer, which can be passed into log.SetOutput().
 func (l *HCLogger) StandardWriter(opts *hclog.StandardLoggerOptions) io.Writer {
 	return io.Discard
 }
@@ -303,7 +310,7 @@ func (l HCLogger) renderSlice(v reflect.Value) string {
 
 		var val string
 
-		switch sv.Kind() {
+		switch sv.Kind() { //nolint:exhaustive
 		case reflect.String:
 			val = strconv.Quote(sv.String())
 		case reflect.Int, reflect.Int16, reflect.Int32, reflect.Int64:

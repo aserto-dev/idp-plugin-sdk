@@ -1,8 +1,9 @@
-package config
+package config_test
 
 import (
 	"testing"
 
+	"github.com/aserto-dev/idp-plugin-sdk/config"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/types/known/structpb"
 )
@@ -26,7 +27,7 @@ func TestNewConfig(t *testing.T) {
 		t.Error(err)
 	}
 	v := &TestConfig{}
-	err = NewConfig(m, v)
+	err = config.NewConfig(m, v)
 	assert.Nil(err)
 	assert.NotNil(v)
 	assert.Equal(1, v.IntValue)
@@ -37,7 +38,7 @@ func TestNewConfig(t *testing.T) {
 func TestApiConfig(t *testing.T) {
 	assert := require.New(t)
 
-	cfg, err := ParseAPIConfig(TestConfig{})
+	cfg, err := config.ParseAPIConfig(TestConfig{})
 	assert.Nil(err)
 	assert.NotNil(cfg)
 	assert.Equal(4, len(cfg))
@@ -46,7 +47,7 @@ func TestApiConfig(t *testing.T) {
 func TestParameterName(t *testing.T) {
 	assert := require.New(t)
 
-	cfg, err := ParseAPIConfig(TestConfig{})
+	cfg, err := config.ParseAPIConfig(TestConfig{})
 	assert.Nil(err)
 	assert.NotNil(cfg)
 	assert.Equal(4, len(cfg))
@@ -66,7 +67,7 @@ func TestParameterTagMissing(t *testing.T) {
 
 	assert := require.New(t)
 
-	cfg, err := ParseAPIConfig(ConfigNoName{})
+	cfg, err := config.ParseAPIConfig(ConfigNoName{})
 	assert.Nil(err)
 	assert.NotNil(cfg)
 	assert.Equal(3, len(cfg))
@@ -87,7 +88,7 @@ func TestNewConfigMissingNameTag(t *testing.T) {
 		t.Error(err)
 	}
 	v := &ConfigNoName{}
-	err = NewConfig(m, v)
+	err = config.NewConfig(m, v)
 	assert.Nil(err)
 	assert.NotNil(v)
 	assert.Equal(1, v.IntValue)

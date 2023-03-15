@@ -7,7 +7,7 @@ This SDK enables building aserto idp plugins using Go.
 ## Tools
 
 - [Git](https://git-scm.com/)
-- [Go 1.17](https://golang.org/dl/)
+- [Go 1.19](https://golang.org/dl/)
 - [Mage](https://magefile.org/)
 
 ## Building
